@@ -21,6 +21,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.jacoco.plugin.version>0.8.0</maven.jacoco.plugin.version>
 		<java.version>1.8</java.version>
 	</properties>
 
@@ -72,7 +73,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-            <plugin>
+          <!--  <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
@@ -83,7 +84,41 @@
                     </formats>
                     <check />
                 </configuration>
-            </plugin>
+            </plugin>-->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${maven.jacoco.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${maven.jacoco.plugin.version}</version>
+				<configuration>
+					<!-- <dataFile>${project.build.directory}/jacoco/jacoco.exec</dataFile> -->
+					<excludes>
+						<exclude>com/puppycrawl/tools/checkstyle/ant/CheckstyleAntTask*.class</exclude>
+						<exclude>com/puppycrawl/tools/checkstyle/grammars/*.class</exclude>
+						<exclude>com/puppycrawl/tools/checkstyle/grammars/javadoc/*.class</exclude>
+						<exclude>com/puppycrawl/tools/checkstyle/gui/*.class</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 			<!--fix for issue with JDK 1.8 181 see: https://stackoverflow.com/questions/53010200/maven-surefire-could-not-find-forkedbooter-class-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
